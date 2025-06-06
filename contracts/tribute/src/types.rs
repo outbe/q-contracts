@@ -18,33 +18,24 @@ impl Cw721CollectionConfig for TributeConfig {}
 #[cw_serde]
 pub struct TributeData {
     /// Value of the Tribute in Settlement Tokens
-    pub minor_value_settlement: Uint128,
+    pub settlement_value: Uint128,
     /// Tribute settlement token
     pub settlement_token: Denom,
     /// Value of the Tribute in Native Coins
-    pub nominal_minor_qty: Uint128,
+    pub nominal_qty: Uint128,
     /// Price in Native coins with a rate on the moment of the transaction
     pub nominal_price: Decimal,
     /// Signals an eligible interest to the network Gratis qty
     pub symbolic_load: Uint128,
-    /// State of the record
-    pub status: Status,
     /// Hashes identifying consumption records batch. Each hash should be a valid unique
     /// sha256 hash in hex format
     pub hashes: Vec<HexBinary>,
     pub tribute_date: Timestamp,
+    pub fidelity_index: i32,
     /// Time when the Tribute NFT was created on the network
     pub created_at: Timestamp,
     /// Last updated time
     pub updated_at: Timestamp,
-}
-
-#[cw_serde]
-pub enum Status {
-    /// Accepted on the Network (Vector and floorPrice can be changed)
-    Accepted,
-    /// Submitted on a Red Day; not eligible for Raffle
-    Muted,
 }
 
 pub type TributeNft = NftInfo<TributeData>;

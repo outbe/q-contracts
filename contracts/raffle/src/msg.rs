@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Timestamp};
+use cosmwasm_std::{Addr, Decimal, Timestamp};
 
 #[cw_serde]
 pub struct InstantiateMsg {
@@ -9,6 +9,8 @@ pub struct InstantiateMsg {
     pub nod: Option<Addr>,
     pub token_allocator: Option<Addr>,
     pub price_oracle: Option<Addr>,
+    /// Deficit config where 1 mean 100%
+    pub deficit: Decimal,
 }
 
 #[cw_serde]

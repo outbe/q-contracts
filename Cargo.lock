@@ -967,6 +967,7 @@ dependencies = [
  "cw2",
  "cw20",
  "nod",
+ "outbe-utils",
  "price-oracle",
  "serde",
  "thiserror 1.0.69",

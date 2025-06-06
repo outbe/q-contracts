@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{Addr, Timestamp, Uint128};
+use cosmwasm_std::{Addr, Decimal, Timestamp, Uint128};
 use cw_ownable::{OwnershipStore, OWNERSHIP_KEY};
 use cw_storage_plus::{Item, Map};
 
@@ -10,6 +10,7 @@ pub struct Config {
     pub nod: Option<Addr>,
     pub token_allocator: Option<Addr>,
     pub price_oracle: Option<Addr>,
+    pub deficit: Decimal,
 }
 
 pub const CONFIG: Item<Config> = Item::new("config");
@@ -40,4 +41,10 @@ pub struct RaffleHistory {
 pub const HISTORY: Item<RaffleHistory> = Item::new("history");
 
 pub const DAILY_RAFFLE: Map<u64, u16> = Map::new("daily_raffle");
+
+/// Map defining how many touch executions were performed at the given date:
+/// Key - date timestamp
+/// Value - touches count i.e., max 1 for the current logic
+pub const DAILY_TOUCH: Map<u64, u16> = Map::new("daily_touch");
+
 pub const TRIBUTES_DISTRIBUTION: Map<&str, String> = Map::new("tributes_distribution");

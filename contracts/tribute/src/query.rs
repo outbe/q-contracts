@@ -1,4 +1,4 @@
-use crate::types::{Status, TributeConfig, TributeData};
+use crate::types::{TributeConfig, TributeData};
 use cosmwasm_schema::{cw_serde, QueryResponses};
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
@@ -48,10 +48,7 @@ pub enum QueryMsg {
 
     /// Returns all tokens created in the given date with an optional filter by status.
     #[returns(DailyTributesResponse)]
-    DailyTributes {
-        date: Timestamp,
-        status: Option<Status>,
-    },
+    DailyTributes { date: Timestamp },
 }
 
 #[cw_serde]
@@ -103,8 +100,8 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
         QueryMsg::AllTokens { start_after, limit } => to_json_binary(
             &outbe_nft::query::query_all_tokens(deps, &env, start_after, limit)?,
         ),
-        QueryMsg::DailyTributes { date, status } => {
-            to_json_binary(&query_daily_tributes(deps, &env, date, status)?)
+        QueryMsg::DailyTributes { date } => {
+            to_json_binary(&query_daily_tributes(deps, &env, date)?)
         }
     }
 }
@@ -112,7 +109,6 @@ fn query_daily_tributes(
     deps: Deps,
     _env: &Env,
     date: Timestamp,
-    status: Option<Status>,
 ) -> StdResult<DailyTributesResponse> {
     let (start_date, end_date) = date_bounds(date);
 
@@ -129,10 +125,8 @@ fn query_daily_tributes(
             .range(deps.storage, None, None, Order::Ascending)
             .filter_map(|item| match item {
                 Ok((id, tribute))
-                    if (tribute.extension.tribute_date >= start_date
-                        && tribute.extension.tribute_date < end_date)
-                        && (status.clone().unwrap_or(tribute.clone().extension.status)
-                            == tribute.extension.status) =>
+                    if tribute.extension.tribute_date >= start_date
+                        && tribute.extension.tribute_date < end_date =>
                 {
                     Some(Ok(FullTributeData {
                         token_id: id,

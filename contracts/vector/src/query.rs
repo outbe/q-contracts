@@ -70,8 +70,8 @@ mod tests {
             .wrap()
             .query_wasm_smart(contract_addr.clone(), &QueryMsg::Vectors {})
             .unwrap();
-        assert_eq!(response.vectors.len(), 24);
+        assert_eq!(response.vectors.len(), 23);
         assert_eq!(response.vectors.first().unwrap().vector_id, 1);
-        assert_eq!(response.vectors.last().unwrap().vector_id, 24);
+        assert_eq!(response.vectors.last().unwrap().vector_id, 23);
     }
 }

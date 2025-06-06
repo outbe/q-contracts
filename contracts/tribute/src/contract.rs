@@ -4,7 +4,7 @@ use crate::msg::{
     TributeMintData,
 };
 use crate::state::HASHES;
-use crate::types::{Status, TributeConfig, TributeData, TributeNft};
+use crate::types::{TributeConfig, TributeData, TributeNft};
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{
@@ -183,17 +183,14 @@ fn execute_mint(
 
     // create the token
     let data = TributeData {
-        minor_value_settlement: entity.minor_value_settlement,
+        settlement_value: entity.minor_value_settlement,
         settlement_token: entity.settlement_token,
         nominal_price: exchange_rate.price,
-        nominal_minor_qty: nominal_qty,
-        status: match exchange_rate.day_type {
-            price_oracle::types::DayType::GREEN => Status::Accepted,
-            price_oracle::types::DayType::RED => Status::Muted,
-        },
+        nominal_qty,
         symbolic_load: load,
         hashes: entity.hashes.clone(),
         tribute_date: entity.tribute_date.unwrap_or(env.block.time),
+        fidelity_index: 0, // TODO implement fidelity index
         created_at: env.block.time,
         updated_at: env.block.time,
     };

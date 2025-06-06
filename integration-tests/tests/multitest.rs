@@ -69,7 +69,7 @@ fn test_tribute() {
         .unwrap();
 
     assert_eq!(
-        response.extension.minor_value_settlement,
+        response.extension.settlement_value,
         Uint128::from(100_000_000u64)
     );
 }
@@ -177,7 +177,6 @@ fn test_raffle() {
             tribute.address.clone(),
             &QueryMsg::DailyTributes {
                 date: app.block_info().time,
-                status: Some(tribute::types::Status::Accepted {}),
             },
         )
         .unwrap();
@@ -350,6 +349,7 @@ fn deploy_raffle(
         nod: Some(nod),
         token_allocator: Some(token_allocator),
         price_oracle: Some(price_oracle),
+        deficit: Decimal::from_str("0.08").unwrap(),
     };
     let address = app
         .instantiate_contract(

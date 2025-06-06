@@ -720,16 +720,6 @@
             "properties": {
               "date": {
                 "$ref": "#/definitions/Timestamp"
-              },
-              "status": {
-                "anyOf": [
-                  {
-                    "$ref": "#/definitions/Status"
-                  },
-                  {
-                    "type": "null"
-                  }
-                ]
               }
             },
             "additionalProperties": false
@@ -739,24 +729,6 @@
       }
     ],
     "definitions": {
-      "Status": {
-        "oneOf": [
-          {
-            "description": "Accepted on the Network (Vector and floorPrice can be changed)",
-            "type": "string",
-            "enum": [
-              "accepted"
-            ]
-          },
-          {
-            "description": "Submitted on a Red Day; not eligible for Raffle",
-            "type": "string",
-            "enum": [
-              "muted"
-            ]
-          }
-        ]
-      },
       "Timestamp": {
         "description": "A point in time in nanosecond precision.\n\nThis type can represent times from 1970-01-01T00:00:00Z to 2554-07-21T23:34:33Z.\n\n## Examples\n\n``` # use cosmwasm_std::Timestamp; let ts = Timestamp::from_nanos(1_000_000_202); assert_eq!(ts.nanos(), 1_000_000_202); assert_eq!(ts.seconds(), 1); assert_eq!(ts.subsec_nanos(), 202);\n\nlet ts = ts.plus_seconds(2); assert_eq!(ts.nanos(), 3_000_000_202); assert_eq!(ts.seconds(), 3); assert_eq!(ts.subsec_nanos(), 202); ```",
         "allOf": [
@@ -997,24 +969,6 @@
           "description": "This is a wrapper around Vec<u8> to add hex de/serialization with serde. It also adds some helper methods to help encode inline.\n\nThis is similar to `cosmwasm_std::Binary` but uses hex. See also <https://github.com/CosmWasm/cosmwasm/blob/main/docs/MESSAGE_TYPES.md>.",
           "type": "string"
         },
-        "Status": {
-          "oneOf": [
-            {
-              "description": "Accepted on the Network (Vector and floorPrice can be changed)",
-              "type": "string",
-              "enum": [
-                "accepted"
-              ]
-            },
-            {
-              "description": "Submitted on a Red Day; not eligible for Raffle",
-              "type": "string",
-              "enum": [
-                "muted"
-              ]
-            }
-          ]
-        },
         "Timestamp": {
           "description": "A point in time in nanosecond precision.\n\nThis type can represent times from 1970-01-01T00:00:00Z to 2554-07-21T23:34:33Z.\n\n## Examples\n\n``` # use cosmwasm_std::Timestamp; let ts = Timestamp::from_nanos(1_000_000_202); assert_eq!(ts.nanos(), 1_000_000_202); assert_eq!(ts.seconds(), 1); assert_eq!(ts.subsec_nanos(), 202);\n\nlet ts = ts.plus_seconds(2); assert_eq!(ts.nanos(), 3_000_000_202); assert_eq!(ts.seconds(), 3); assert_eq!(ts.subsec_nanos(), 202); ```",
           "allOf": [
@@ -1028,12 +982,12 @@
           "type": "object",
           "required": [
             "created_at",
+            "fidelity_index",
             "hashes",
-            "minor_value_settlement",
-            "nominal_minor_qty",
             "nominal_price",
+            "nominal_qty",
             "settlement_token",
-            "status",
+            "settlement_value",
             "symbolic_load",
             "tribute_date",
             "updated_at"
@@ -1047,6 +1001,10 @@
                 }
               ]
             },
+            "fidelity_index": {
+              "type": "integer",
+              "format": "int32"
+            },
             "hashes": {
               "description": "Hashes identifying consumption records batch. Each hash should be a valid unique sha256 hash in hex format",
               "type": "array",
@@ -1054,27 +1012,19 @@
                 "$ref": "#/definitions/HexBinary"
               }
             },
-            "minor_value_settlement": {
-              "description": "Value of the Tribute in Settlement Tokens",
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Uint128"
-                }
-              ]
-            },
-            "nominal_minor_qty": {
-              "description": "Value of the Tribute in Native Coins",
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Uint128"
-                }
-              ]
-            },
             "nominal_price": {
               "description": "Price in Native coins with a rate on the moment of the transaction",
               "allOf": [
                 {
                   "$ref": "#/definitions/Decimal"
+                }
+              ]
+            },
+            "nominal_qty": {
+              "description": "Value of the Tribute in Native Coins",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Uint128"
                 }
               ]
             },
@@ -1086,11 +1036,11 @@
                 }
               ]
             },
-            "status": {
-              "description": "State of the record",
+            "settlement_value": {
+              "description": "Value of the Tribute in Settlement Tokens",
               "allOf": [
                 {
-                  "$ref": "#/definitions/Status"
+                  "$ref": "#/definitions/Uint128"
                 }
               ]
             },
@@ -1383,24 +1333,6 @@
           "description": "This is a wrapper around Vec<u8> to add hex de/serialization with serde. It also adds some helper methods to help encode inline.\n\nThis is similar to `cosmwasm_std::Binary` but uses hex. See also <https://github.com/CosmWasm/cosmwasm/blob/main/docs/MESSAGE_TYPES.md>.",
           "type": "string"
         },
-        "Status": {
-          "oneOf": [
-            {
-              "description": "Accepted on the Network (Vector and floorPrice can be changed)",
-              "type": "string",
-              "enum": [
-                "accepted"
-              ]
-            },
-            {
-              "description": "Submitted on a Red Day; not eligible for Raffle",
-              "type": "string",
-              "enum": [
-                "muted"
-              ]
-            }
-          ]
-        },
         "Timestamp": {
           "description": "A point in time in nanosecond precision.\n\nThis type can represent times from 1970-01-01T00:00:00Z to 2554-07-21T23:34:33Z.\n\n## Examples\n\n``` # use cosmwasm_std::Timestamp; let ts = Timestamp::from_nanos(1_000_000_202); assert_eq!(ts.nanos(), 1_000_000_202); assert_eq!(ts.seconds(), 1); assert_eq!(ts.subsec_nanos(), 202);\n\nlet ts = ts.plus_seconds(2); assert_eq!(ts.nanos(), 3_000_000_202); assert_eq!(ts.seconds(), 3); assert_eq!(ts.subsec_nanos(), 202); ```",
           "allOf": [
@@ -1414,12 +1346,12 @@
           "type": "object",
           "required": [
             "created_at",
+            "fidelity_index",
             "hashes",
-            "minor_value_settlement",
-            "nominal_minor_qty",
             "nominal_price",
+            "nominal_qty",
             "settlement_token",
-            "status",
+            "settlement_value",
             "symbolic_load",
             "tribute_date",
             "updated_at"
@@ -1433,6 +1365,10 @@
                 }
               ]
             },
+            "fidelity_index": {
+              "type": "integer",
+              "format": "int32"
+            },
             "hashes": {
               "description": "Hashes identifying consumption records batch. Each hash should be a valid unique sha256 hash in hex format",
               "type": "array",
@@ -1440,27 +1376,19 @@
                 "$ref": "#/definitions/HexBinary"
               }
             },
-            "minor_value_settlement": {
-              "description": "Value of the Tribute in Settlement Tokens",
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Uint128"
-                }
-              ]
-            },
-            "nominal_minor_qty": {
-              "description": "Value of the Tribute in Native Coins",
-              "allOf": [
-                {
-                  "$ref": "#/definitions/Uint128"
-                }
-              ]
-            },
             "nominal_price": {
               "description": "Price in Native coins with a rate on the moment of the transaction",
               "allOf": [
                 {
                   "$ref": "#/definitions/Decimal"
+                }
+              ]
+            },
+            "nominal_qty": {
+              "description": "Value of the Tribute in Native Coins",
+              "allOf": [
+                {
+                  "$ref": "#/definitions/Uint128"
                 }
               ]
             },
@@ -1472,11 +1400,11 @@
                 }
               ]
             },
-            "status": {
-              "description": "State of the record",
+            "settlement_value": {
+              "description": "Value of the Tribute in Settlement Tokens",
               "allOf": [
                 {
-                  "$ref": "#/definitions/Status"
+                  "$ref": "#/definitions/Uint128"
                 }
               ]
             },

@@ -13,9 +13,7 @@ pub const CONFIG: Item<Config> = Item::new("config");
 
 pub const CREATOR: OwnershipStore = OwnershipStore::new(OWNERSHIP_KEY);
 
-/// Defined a list of vector tiers with their weights.
-/// The base formula for weights is the following:
-/// `weight = (1/8) ^ (16 - n / 15)` where n is id of the tier
+/// Defined a list of vector tiers
 pub fn default_vector_tiers() -> Vec<Vector> {
     vec![
         Vector {
@@ -133,10 +131,6 @@ pub fn default_vector_tiers() -> Vec<Vector> {
             name: "Growth Vector 96%".to_string(),
             vector_rate: Uint128::new(96u128),
         },
-        Vector {
-            vector_id: 24,
-            name: "Growth Vector 100%".to_string(),
-            vector_rate: Uint128::new(100u128),
-        },
+        // + touch execution
     ]
 }
